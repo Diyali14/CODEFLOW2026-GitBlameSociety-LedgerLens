@@ -1,15 +1,27 @@
 function EmptyTransactions() {
 
     return (
-        <div className="bg-white rounded-3xl border border-slate-200 p-16 text-center shadow-sm">
+        <div className="
+            relative overflow-hidden
+            rounded-4xl
+            border border-emerald-100
+            bg-white/70 backdrop-blur-2xl
+            p-16 text-center
+        ">
 
-            <h2 className="text-3xl font-bold text-slate-700">
-                No Transactions Found
-            </h2>
+            <div className="absolute inset-0 bg-linear-to-br from-emerald-50/40 via-white to-yellow-50/30" />
 
-            <p className="text-slate-500 mt-4">
-                Try changing filters or search keywords.
-            </p>
+            <div className="relative z-10">
+
+                <h2 className="text-2xl font-medium text-slate-900">
+                    No Transactions Found
+                </h2>
+
+                <p className="text-slate-500 mt-3">
+                    Try adjusting filters or search terms
+                </p>
+
+            </div>
 
         </div>
     );

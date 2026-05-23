@@ -8,36 +8,50 @@ import {
     CartesianGrid,
 } from "recharts";
 
-function MonthlyTrendChart({
-    data,
-}) {
+function MonthlyTrendChart({ data }) {
 
     return (
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <div className="
+            relative overflow-hidden
+            rounded-4xl
+            border border-emerald-100
+            bg-white/60 backdrop-blur-2xl
+            p-6
+        ">
 
-            <h2 className="text-xl font-bold mb-5">
+            {/* glow */}
+            <div className="absolute -top-24 left-0 w-100 h-100 bg-emerald-200/20 blur-[120px]" />
+
+            <h2 className="text-lg font-medium text-slate-900 mb-5 relative z-10">
                 Monthly Expense Trend
             </h2>
 
-            <div className="h-75">
+            <div className="h-80 relative z-10">
 
                 <ResponsiveContainer width="100%" height="100%">
 
                     <LineChart data={data}>
 
-                        <CartesianGrid strokeDasharray="3 3" />
+                        <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
 
-                        <XAxis dataKey="month" />
+                        <XAxis dataKey="month" stroke="#94a3b8" />
+                        <YAxis stroke="#94a3b8" />
 
-                        <YAxis />
-
-                        <Tooltip />
+                        <Tooltip
+                            contentStyle={{
+                                backgroundColor: "white",
+                                border: "1px solid #d1fae5",
+                                borderRadius: "12px",
+                            }}
+                        />
 
                         <Line
                             type="monotone"
                             dataKey="expense"
-                            stroke="#16A34A"
+                            stroke="#10b981"
                             strokeWidth={3}
+                            dot={{ r: 3 }}
+                            activeDot={{ r: 6 }}
                         />
 
                     </LineChart>

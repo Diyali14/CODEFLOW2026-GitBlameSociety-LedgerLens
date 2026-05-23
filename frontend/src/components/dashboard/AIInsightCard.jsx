@@ -1,39 +1,48 @@
-import {
-    FaRobot,
-} from "react-icons/fa";
+import { FaRobot } from "react-icons/fa";
 
-function AIInsightCard({
-    summary,
-}) {
+function AIInsightCard({ summary }) {
 
     return (
-        <div className="bg-linear-to-r from-green-600 to-green-700 rounded-3xl p-8 text-white shadow-lg">
+        <div className="
+            relative overflow-hidden
+            rounded-4xl
+            border border-emerald-100
+            bg-white/60 backdrop-blur-2xl
+            p-8 shadow-sm
+        ">
 
-            <div className="flex items-center gap-4 mb-5">
+            {/* glow */}
+            <div className="absolute -top-20 -right-20 w-60 h-60 bg-emerald-300/30 blur-[120px]" />
 
-                <div className="bg-white/20 p-4 rounded-2xl">
+            <div className="flex items-start gap-5 relative z-10">
 
-                    <FaRobot className="text-3xl" />
-
+                <div className="
+                    p-4 rounded-2xl
+                    bg-linear-to-br from-emerald-500 to-green-600
+                    text-white shadow-md
+                ">
+                    <FaRobot className="text-2xl" />
                 </div>
 
                 <div>
-
-                    <h2 className="text-3xl font-bold">
+                    <h2 className="text-2xl font-medium text-slate-900">
                         AI Financial Insights
                     </h2>
 
-                    <p className="text-green-100 mt-1">
-                        Smart analysis powered by AI
+                    <p className="text-slate-500 text-sm mt-1">
+                        Real-time intelligence from your spending behavior
                     </p>
-
                 </div>
 
             </div>
 
-            <p className="leading-8 text-lg text-green-50 whitespace-pre-line">
-                {summary}
-            </p>
+            <div className="mt-6 relative z-10">
+
+                <p className="text-slate-600 leading-7 whitespace-pre-line">
+                    {summary}
+                </p>
+
+            </div>
 
         </div>
     );

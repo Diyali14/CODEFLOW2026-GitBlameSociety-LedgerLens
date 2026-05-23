@@ -1,37 +1,48 @@
-function RecurringPaymentsCard({
-    recurring,
-}) {
+function RecurringPaymentsCard({ recurring }) {
 
     return (
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <div className="
+            relative overflow-hidden
+            rounded-4xl
+            border border-emerald-100
+            bg-white/60 backdrop-blur-2xl
+            p-6
+        ">
 
-            <h2 className="text-2xl font-bold text-green-700 mb-5">
+            <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-emerald-200/20 blur-[120px]" />
+
+            <h2 className="text-lg font-medium text-slate-900 mb-5">
                 Recurring Payments
             </h2>
 
             <div className="space-y-4">
 
                 {recurring.map((item, index) => (
-
                     <div
                         key={index}
-                        className="border border-green-100 bg-green-50 rounded-xl p-4"
+                        className="
+                            rounded-2xl
+                            border border-emerald-100
+                            bg-linear-to-br from-emerald-50/60 to-white
+                            p-4
+                        "
                     >
 
-                        <p className="font-semibold">
-                            {item.name}
-                        </p>
+                        <div className="flex justify-between">
+                            <p className="font-medium text-slate-900">
+                                {item.name}
+                            </p>
 
-                        <p className="text-sm text-slate-500">
+                            <span className="text-xs px-3 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                                {item.frequency}
+                            </span>
+                        </div>
+
+                        <p className="text-sm text-slate-500 mt-1">
                             ₹{item.amount}
                         </p>
 
-                        <p className="text-sm text-green-700">
-                            {item.frequency}
-                        </p>
-
                     </div>
-
                 ))}
 
             </div>

@@ -1,133 +1,179 @@
-import {
-    suspiciousTransactions,
-} from "../data/dummyData";
+import { suspiciousTransactions } from "../data/dummyData";
 
 function AnomaliesPage() {
 
     return (
-        <div className="space-y-8">
+        <div className="relative max-w-6xl mx-auto px-4 md:px-6 py-10 space-y-10">
 
-            <div className="bg-linear-to-r from-red-500 to-orange-500 rounded-3xl p-8 text-white">
+            {/* Red ambient glow */}
+            <div className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-175 h-175 bg-red-400/20 blur-[170px] rounded-full" />
 
-                <h1 className="text-4xl font-bold">
-                    AI Risk Monitoring
-                </h1>
+            {/* =========================
+                HEADER
+            ========================== */}
+            <div className="
+                relative
+                overflow-hidden
+                rounded-4xl
+                border border-red-200/60
+                bg-linear-to-br from-red-600 via-red-500 to-orange-500
+                text-white
+                p-8
+                shadow-[0_20px_80px_rgba(239,68,68,0.25)]
+            ">
 
-                <p className="mt-3 text-lg text-red-100">
-                    Detect unusual spending behavior and suspicious financial activities.
-                </p>
+                {/* shine sweep */}
+                <div className="
+                    absolute inset-0
+                    bg-[linear-gradient(120deg,transparent,rgba(255,255,255,0.25),transparent)]
+                    -translate-x-full
+                    animate-[shine_4s_ease-in-out_infinite]
+                " />
+
+                {/* subtle noise glow */}
+                <div className="absolute inset-0 bg-white/10 mix-blend-overlay pointer-events-none" />
+
+                <div className="relative z-10">
+
+                    <h1 className="text-3xl md:text-4xl font-medium tracking-[-0.03em]">
+                        AI Risk Monitoring
+                    </h1>
+
+                    <p className="mt-3 text-red-50/90 text-base md:text-lg max-w-2xl">
+                        Detect unusual spending behavior, suspicious transactions,
+                        and financial anomalies in real time using AI intelligence.
+                    </p>
+
+                </div>
 
             </div>
 
+            {/* =========================
+                STATS
+            ========================== */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-                <div className="bg-white rounded-3xl p-6 border border-slate-200">
-
-                    <p className="text-slate-500">
-                        Total Risks
-                    </p>
-
-                    <h2 className="text-4xl font-bold text-red-600 mt-3">
-                        12
-                    </h2>
-
+                <div className="
+                    relative overflow-hidden rounded-[1.8rem]
+                    border border-red-100
+                    bg-white/70 backdrop-blur-xl
+                    p-6
+                ">
+                    <div className="absolute inset-0 bg-linear-to-br from-red-50/60 via-white to-transparent" />
+                    <div className="relative z-10">
+                        <p className="text-slate-500 text-sm">Total Risks</p>
+                        <h2 className="text-2xl font-medium text-red-600 mt-3">12</h2>
+                    </div>
                 </div>
 
-                <div className="bg-white rounded-3xl p-6 border border-slate-200">
-
-                    <p className="text-slate-500">
-                        High Severity
-                    </p>
-
-                    <h2 className="text-4xl font-bold text-orange-500 mt-3">
-                        3
-                    </h2>
-
+                <div className="
+                    relative overflow-hidden rounded-[1.8rem]
+                    border border-red-100
+                    bg-white/70 backdrop-blur-xl
+                    p-6
+                ">
+                    <div className="absolute inset-0 bg-linear-to-br from-orange-50/40 via-white to-transparent" />
+                    <div className="relative z-10">
+                        <p className="text-slate-500 text-sm">High Severity</p>
+                        <h2 className="text-2xl font-medium text-orange-500 mt-3">3</h2>
+                    </div>
                 </div>
 
-                <div className="bg-white rounded-3xl p-6 border border-slate-200">
-
-                    <p className="text-slate-500">
-                        Risk Score
-                    </p>
-
-                    <h2 className="text-4xl font-bold text-slate-800 mt-3">
-                        82%
-                    </h2>
-
+                <div className="
+                    relative overflow-hidden rounded-[1.8rem]
+                    border border-red-100
+                    bg-white/70 backdrop-blur-xl
+                    p-6
+                ">
+                    <div className="absolute inset-0 bg-linear-to-br from-slate-50 via-white to-red-50/40" />
+                    <div className="relative z-10">
+                        <p className="text-slate-500 text-sm">Risk Score</p>
+                        <h2 className="text-2xl font-medium text-slate-800 mt-3">82%</h2>
+                    </div>
                 </div>
 
             </div>
 
-            <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden">
+            {/* =========================
+                TABLE
+            ========================== */}
+            <div className="
+                relative overflow-hidden rounded-4xl
+                border border-red-100
+                bg-white/70 backdrop-blur-2xl
+            ">
 
-                <div className="p-6 border-b border-slate-200">
+                <div className="absolute inset-0 bg-linear-to-br from-white/80 via-transparent to-red-50/30" />
 
-                    <h2 className="text-2xl font-bold">
-                        Suspicious Transactions
-                    </h2>
+                <div className="relative z-10">
 
-                </div>
+                    {/* TABLE HEADER */}
+                    <div className="
+                        p-6
+                        border-b border-red-200
+                        bg-linear-to-r from-red-600/90 via-red-500/80 to-orange-500/80
+                        text-white
+                    ">
+                        <h2 className="text-lg font-medium">
+                            Suspicious Transactions
+                        </h2>
 
-                <div className="overflow-x-auto">
+                        <p className="text-sm text-white/80 mt-1">
+                            Flagged by AI anomaly detection system
+                        </p>
+                    </div>
 
-                    <table className="w-full min-w-175">
+                    <div className="overflow-x-auto">
 
-                        <thead className="bg-slate-100">
+                        <table className="w-full min-w-175">
 
-                            <tr>
+                            <thead className="
+                                bg-red-50
+                                text-red-700
+                                border-b border-red-100
+                            ">
+                                <tr>
+                                    <th className="p-5 text-left font-medium">Date</th>
+                                    <th className="p-5 text-left font-medium">Narration</th>
+                                    <th className="p-5 text-left font-medium">Amount</th>
+                                    <th className="p-5 text-left font-medium">Severity</th>
+                                </tr>
+                            </thead>
 
-                                <th className="p-5 text-left">
-                                    Date
-                                </th>
+                            <tbody>
 
-                                <th className="p-5 text-left">
-                                    Narration
-                                </th>
-
-                                <th className="p-5 text-left">
-                                    Amount
-                                </th>
-
-                                <th className="p-5 text-left">
-                                    Severity
-                                </th>
-
-                            </tr>
-
-                        </thead>
-
-                        <tbody>
-
-                            {suspiciousTransactions.map(
-                                (item) => (
+                                {suspiciousTransactions.map((item) => (
 
                                     <tr
                                         key={item.id}
-                                        className="border-b border-slate-100"
+                                        className="
+                                            border-b border-red-50
+                                            hover:bg-red-50/30
+                                            transition
+                                        "
                                     >
 
-                                        <td className="p-5">
+                                        <td className="p-5 text-slate-600">
                                             {item.date}
                                         </td>
 
-                                        <td className="p-5 font-medium">
+                                        <td className="p-5 font-medium text-slate-800">
                                             {item.narration}
                                         </td>
 
-                                        <td className="p-5 text-red-600 font-bold">
+                                        <td className="p-5 font-semibold text-red-600">
                                             ₹{item.amount}
                                         </td>
 
                                         <td className="p-5">
 
-                                            <span
-                                                className={`px-3 py-1 rounded-full text-sm
-                        ${item.severity === "High"
-                                                        ? "bg-red-100 text-red-600"
-                                                        : "bg-orange-100 text-orange-600"
-                                                    }`}
-                                            >
+                                            <span className={`
+                                                px-3 py-1 rounded-full text-xs font-medium border
+                                                ${item.severity === "High"
+                                                    ? "bg-red-50 text-red-600 border-red-100"
+                                                    : "bg-orange-50 text-orange-600 border-orange-100"
+                                                }
+                                            `}>
                                                 {item.severity}
                                             </span>
 
@@ -135,12 +181,13 @@ function AnomaliesPage() {
 
                                     </tr>
 
-                                )
-                            )}
+                                ))}
 
-                        </tbody>
+                            </tbody>
 
-                    </table>
+                        </table>
+
+                    </div>
 
                 </div>
 
