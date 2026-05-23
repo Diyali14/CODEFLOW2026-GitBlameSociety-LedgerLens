@@ -42,7 +42,12 @@ public class SecurityConfig {
                                 "/api/auth/login",
                                 "/api/statements/upload",
                                 "/api/test-ai",
-                                "/api/category/run"
+                                "/api/category/run",
+                                "/api/analytics/spending-by-category",
+                                "/api/analytics/dashboard",
+                                "/api/analytics/highest-category-spending",
+                                "/api/analytics/transactions-table",
+                                "/api/analytics/recurring-transactions"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
