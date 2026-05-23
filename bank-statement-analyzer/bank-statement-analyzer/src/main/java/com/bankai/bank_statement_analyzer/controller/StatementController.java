@@ -1,5 +1,6 @@
 package com.bankai.bank_statement_analyzer.controller;
 
+import com.bankai.bank_statement_analyzer.dto.statement.UploadResponse;
 import com.bankai.bank_statement_analyzer.service.StatementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -17,12 +18,15 @@ public class StatementController {
             value = "/upload",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
-    public String uploadStatement(
+    public UploadResponse uploadStatement(
             @RequestParam("file") MultipartFile file
     ) {
 
         statementService.uploadStatement(file);
 
-        return "PDF uploaded successfully";
+        return new UploadResponse(
+                true,
+                "Statement uploaded successfully"
+        );
     }
 }
