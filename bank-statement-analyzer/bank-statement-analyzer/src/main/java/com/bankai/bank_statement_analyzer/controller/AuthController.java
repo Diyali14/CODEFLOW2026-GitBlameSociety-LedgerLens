@@ -1,5 +1,7 @@
 package com.bankai.bank_statement_analyzer.controller;
 
+import com.bankai.bank_statement_analyzer.dto.auth.LoginRequest;
+import com.bankai.bank_statement_analyzer.dto.auth.LoginResponse;
 import com.bankai.bank_statement_analyzer.dto.auth.SignupRequest;
 import com.bankai.bank_statement_analyzer.dto.auth.SignupResponse;
 import com.bankai.bank_statement_analyzer.service.AuthService;
@@ -19,5 +21,12 @@ public class AuthController {
             @Valid @RequestBody SignupRequest request
     ) {
         return authService.signup(request);
+    }
+
+    @PostMapping("/login")
+    public LoginResponse login(
+            @Valid @RequestBody LoginRequest request
+    ) {
+        return authService.login(request);
     }
 }

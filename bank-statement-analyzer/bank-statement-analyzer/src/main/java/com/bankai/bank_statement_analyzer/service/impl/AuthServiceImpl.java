@@ -1,5 +1,7 @@
 package com.bankai.bank_statement_analyzer.service.impl;
 
+import com.bankai.bank_statement_analyzer.dto.auth.LoginRequest;
+import com.bankai.bank_statement_analyzer.dto.auth.LoginResponse;
 import com.bankai.bank_statement_analyzer.dto.auth.SignupRequest;
 import com.bankai.bank_statement_analyzer.dto.auth.SignupResponse;
 import com.bankai.bank_statement_analyzer.entity.User;
@@ -8,10 +10,14 @@ import com.bankai.bank_statement_analyzer.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
+
+    private final AuthenticationManager authenticationManager;
 
     private final UserRepository userRepository;
 
@@ -37,5 +43,20 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
 
         return new SignupResponse("User registered successfully");
+    }
+
+    @Override
+    public LoginResponse login(LoginRequest request) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getUsername(),
+                        request.getPassword()
+                )
+        );
+
+        return new LoginResponse(
+                "Login successful",
+                request.getUsername()
+        );
     }
 }
