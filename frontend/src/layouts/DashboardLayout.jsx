@@ -1,19 +1,44 @@
 import { Outlet } from "react-router-dom";
+
+import {
+    useState,
+} from "react";
+
 import Sidebar from "../components/common/Sidebar";
+
 import Navbar from "../components/common/Navbar";
 
+import MobileSidebar from "../components/dashboard/MobileSidebar";
+
 function DashboardLayout() {
+
+    const [mobileOpen, setMobileOpen] =
+        useState(false);
+
     return (
-        <div className="flex">
+        <div className="bg-slate-100 min-h-screen">
 
-            <Sidebar />
+            <MobileSidebar
+                mobileOpen={mobileOpen}
+                setMobileOpen={setMobileOpen}
+            />
 
-            <div className="flex-1 flex flex-col">
+            <div className="flex">
 
-                <Navbar />
+                <Sidebar />
 
-                <div className="p-6 bg-slate-950 min-h-screen">
-                    <Outlet />
+                <div className="flex-1 min-w-0">
+
+                    <Navbar
+                        setMobileOpen={setMobileOpen}
+                    />
+
+                    <div className="p-4 md:p-8">
+
+                        <Outlet />
+
+                    </div>
+
                 </div>
 
             </div>

@@ -1,22 +1,387 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
-body {
-  background-color: #0F172A;
-  color: white;
-  font-family: Arial, Helvetica, sans-serif;
-  margin: 0;
-  padding: 0;
-}
+@import "tailwindcss";
 
 * {
   box-sizing: border-box;
 }
 
-::-webkit-scrollbar {
-  width: 6px;
+html {
+  scroll-behavior: smooth;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #334155;
-  border-radius: 10px;
+body {
+  margin: 0;
+  overflow-x: hidden;
+  font-family: 'Space Grotesk', sans-serif;
+  background: #f7faf7;
+}
+
+/* =========================================
+   MAIN GRADIENT FIELD
+========================================= */
+
+.noise-layer {
+  position: absolute;
+  inset: -250px;
+
+  background:
+    conic-gradient(from 180deg at 50% 50%,
+      #ffffff,
+      #dcfce7,
+      #bbf7d0,
+      #6ee7b7,
+      #34d399,
+      #10b981,
+      #059669,
+      #d1fae5,
+      #ffffff);
+
+  filter: blur(60px) saturate(180%);
+  opacity: 0.8;
+
+  mask:
+    radial-gradient(circle at center, white 2px, transparent 3px) 50% 50% / 24px 24px,
+
+    url("https://assets.codepen.io/605876/noise-mask.png") 256px 50% / 256px 256px;
+
+  -webkit-mask:
+    radial-gradient(circle at center, white 2px, transparent 3px) 50% 50% / 24px 24px,
+
+    url("https://assets.codepen.io/605876/noise-mask.png") 256px 50% / 256px 256px;
+
+  mask-composite: intersect;
+  -webkit-mask-composite: source-in;
+
+  animation:
+    noiseMove 12s linear infinite,
+    rotateField 40s linear infinite;
+}
+
+@keyframes noiseMove {
+  from {
+    mask-position: 50% 50%, 0 50%;
+    -webkit-mask-position: 50% 50%, 0 50%;
+  }
+
+  to {
+    mask-position: 50% 50%, 512px 50%;
+    -webkit-mask-position: 50% 50%, 512px 50%;
+  }
+}
+
+@keyframes rotateField {
+  from {
+    transform: rotate(0deg) scale(1.4);
+  }
+
+  to {
+    transform: rotate(360deg) scale(1.4);
+  }
+}
+
+/* =========================================
+   GRID
+========================================= */
+
+.legal-grid {
+  position: absolute;
+  inset: -200px;
+
+  background-image:
+    linear-gradient(rgba(16, 185, 129, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16, 185, 129, 0.08) 1px, transparent 1px);
+
+  background-size: 80px 80px;
+
+  animation: gridShift 18s linear infinite;
+
+  opacity: 0.3;
+}
+
+@keyframes gridShift {
+  from {
+    transform: translate(0px, 0px);
+  }
+
+  to {
+    transform: translate(80px, 80px);
+  }
+}
+
+/* =========================================
+   RADIAL CIRCLES
+========================================= */
+
+.legal-circles {
+  position: absolute;
+  inset: 0;
+
+  background:
+    radial-gradient(circle at center,
+      transparent 0%,
+      transparent 20%,
+      rgba(16, 185, 129, 0.05) 21%,
+      transparent 22%),
+
+    radial-gradient(circle at center,
+      transparent 0%,
+      transparent 35%,
+      rgba(16, 185, 129, 0.04) 36%,
+      transparent 37%),
+
+    radial-gradient(circle at center,
+      transparent 0%,
+      transparent 50%,
+      rgba(16, 185, 129, 0.03) 51%,
+      transparent 52%);
+
+  transform: scale(1.4);
+
+  opacity: 0.8;
+}
+
+/* =========================================
+   SCAN LINE
+========================================= */
+
+.scan-line {
+  position: absolute;
+
+  width: 200%;
+  height: 300px;
+
+  background:
+    linear-gradient(to bottom,
+      transparent,
+      rgba(16, 185, 129, 0.1),
+      transparent);
+
+  top: -20%;
+  left: -50%;
+
+  transform: rotate(-12deg);
+
+  animation: scanMove 10s linear infinite;
+}
+
+@keyframes scanMove {
+  from {
+    transform: rotate(-12deg) translateY(-500px);
+  }
+
+  to {
+    transform: rotate(-12deg) translateY(120vh);
+  }
+}
+
+/* =========================================
+   NOISE TEXTURE
+========================================= */
+
+.noise-overlay {
+  position: absolute;
+  inset: 0;
+
+  background-image:
+    url("https://www.transparenttextures.com/patterns/asfalt-dark.png");
+
+  opacity: 0.04;
+}
+
+/* =========================================
+   EXTRA GLOW BLOBS
+========================================= */
+
+.noise-overlay::before,
+.noise-overlay::after {
+  content: "";
+
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(120px);
+}
+
+.noise-overlay::before {
+  width: 400px;
+  height: 400px;
+
+  background: rgba(16, 185, 129, 0.18);
+
+  top: 10%;
+  left: 5%;
+
+  animation: floatBlob 12s ease-in-out infinite alternate;
+}
+
+.noise-overlay::after {
+  width: 350px;
+  height: 350px;
+
+  background: rgba(52, 211, 153, 0.14);
+
+  bottom: 5%;
+  right: 5%;
+
+  animation: floatBlob2 16s ease-in-out infinite alternate;
+}
+
+@keyframes floatBlob {
+  from {
+    transform: translateY(0px) translateX(0px);
+  }
+
+  to {
+    transform: translateY(40px) translateX(30px);
+  }
+}
+
+@keyframes floatBlob2 {
+  from {
+    transform: translateY(0px) translateX(0px);
+  }
+
+  to {
+    transform: translateY(-40px) translateX(-20px);
+  }
+}
+
+/* =========================================
+   AUTH BACKGROUND
+========================================= */
+
+.auth-gradient {
+  position: absolute;
+  inset: -200px;
+
+  background:
+    radial-gradient(circle at top left,
+      rgba(16, 185, 129, 0.10),
+      transparent 30%),
+
+    radial-gradient(circle at bottom right,
+      rgba(52, 211, 153, 0.08),
+      transparent 35%),
+
+    linear-gradient(135deg,
+      #ffffff,
+      #f7faf7,
+      #ecfdf5);
+
+  filter: blur(40px);
+
+  animation: authFloat 18s ease-in-out infinite alternate;
+}
+
+@keyframes authFloat {
+  from {
+    transform: translateY(0px) scale(1);
+  }
+
+  to {
+    transform: translateY(-20px) scale(1.03);
+  }
+}
+
+/* =========================================
+   SUBTLE GRID
+========================================= */
+
+.auth-grid {
+  position: absolute;
+  inset: 0;
+
+  background-image:
+    linear-gradient(rgba(16, 185, 129, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16, 185, 129, 0.03) 1px, transparent 1px);
+
+  background-size: 70px 70px;
+
+  opacity: 0.35;
+
+  animation: authGridMove 25s linear infinite;
+}
+
+@keyframes authGridMove {
+  from {
+    transform: translate(0px, 0px);
+  }
+
+  to {
+    transform: translate(70px, 70px);
+  }
+}
+
+/* =========================================
+   CIRCLES
+========================================= */
+
+.auth-circles {
+  position: absolute;
+  inset: 0;
+
+  background:
+    radial-gradient(circle at center,
+      transparent 0%,
+      transparent 22%,
+      rgba(16, 185, 129, 0.03) 23%,
+      transparent 24%),
+
+    radial-gradient(circle at center,
+      transparent 0%,
+      transparent 40%,
+      rgba(16, 185, 129, 0.02) 41%,
+      transparent 42%);
+
+  transform: scale(1.2);
+
+  opacity: 0.7;
+}
+
+/* =========================================
+   SOFT SCAN
+========================================= */
+
+.auth-scan {
+  position: absolute;
+
+  width: 180%;
+  height: 200px;
+
+  background:
+    linear-gradient(to bottom,
+      transparent,
+      rgba(16, 185, 129, 0.04),
+      transparent);
+
+  top: -20%;
+  left: -40%;
+
+  transform: rotate(-10deg);
+
+  animation: authScanMove 12s linear infinite;
+}
+
+@keyframes authScanMove {
+  from {
+    transform: rotate(-10deg) translateY(-300px);
+  }
+
+  to {
+    transform: rotate(-10deg) translateY(120vh);
+  }
+}
+
+/* =========================================
+   NOISE
+========================================= */
+
+.auth-noise {
+  position: absolute;
+  inset: 0;
+
+  background-image:
+    url("https://www.transparenttextures.com/patterns/asfalt-light.png");
+
+  opacity: 0.03;
 }

@@ -16,7 +16,7 @@ import TransactionsPage from "../pages/TransactionsPage";
 import InsightsPage from "../pages/InsightsPage";
 import AIRecommendationsPage from "../pages/AIRecommendationsPage";
 import AnomaliesPage from "../pages/AnomaliesPage";
-import RecurringPaymentsPage from "../pages/RecurringPaymentsPage";
+import RecurringPage from "../pages/RecurringPaymentsPage";
 import ReportsPage from "../pages/ReportsPage";
 import ProfilePage from "../pages/ProfilePage";
 import SettingsPage from "../pages/SettingsPage";
@@ -40,9 +40,9 @@ function AppRoutes() {
 
                 <Route
                     element={
-                        <ProtectedRoute>
+                        // <ProtectedRoute>
                             <DashboardLayout />
-                        </ProtectedRoute>
+                        //</ProtectedRoute>
                     }
                 >
 
@@ -52,7 +52,7 @@ function AppRoutes() {
                     <Route path="/insights" element={<InsightsPage />} />
                     <Route path="/recommendations" element={<AIRecommendationsPage />} />
                     <Route path="/anomalies" element={<AnomaliesPage />} />
-                    <Route path="/recurring" element={<RecurringPaymentsPage />} />
+                    <Route path="/recurring" element={<RecurringPage />} />
                     <Route path="/reports" element={<ReportsPage />} />
                     <Route path="/profile" element={<ProfilePage />} />
                     <Route path="/settings" element={<SettingsPage />} />

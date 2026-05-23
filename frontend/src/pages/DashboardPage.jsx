@@ -1,44 +1,96 @@
+import DashboardSummary from "../components/dashboard/DashboardSummary";
+
+import ExpensePieChart from "../components/dashboard/ExpensePieChart";
+
+import MonthlyTrendChart from "../components/dashboard/MonthlyTrendChart";
+
+import AIInsightCard from "../components/dashboard/AIInsightCard";
+
+import AnomalyCard from "../components/dashboard/AnomalyCard";
+
+import RecurringPaymentsCard from "../components/dashboard/RecurringPaymentsCard";
+
+import TransactionTable from "../components/dashboard/TransactionTable";
+
+import FinancialHealthCard from "../components/dashboard/FinancialHealthCard";
+
+import IncomeExpenseBarChart from "../components/charts/IncomeExpenseBarChart";
+
+import SavingsTrendAreaChart from "../components/charts/SavingsTrendAreaChart";
+
+import CategoryComparisonChart from "../components/charts/CategoryComparisonChart";
+
+import {
+    dashboardSummary,
+    categoryDistribution,
+    monthlyTrend,
+    transactions,
+    anomalies,
+    recurringPayments,
+    aiSummary,
+    incomeExpenseData,
+    savingsTrendData,
+    categoryComparisonData,
+} from "../data/dummyData";
+
 function DashboardPage() {
+
     return (
-        <div>
+        <div className="space-y-8">
 
-            <h1 className="text-4xl font-bold mb-8">
-                Dashboard
-            </h1>
+            <DashboardSummary
+                summary={dashboardSummary}
+            />
 
-            <div className="grid grid-cols-3 gap-6">
+            <FinancialHealthCard />
 
-                <div className="bg-slate-900 p-6 rounded-xl">
-                    <h2 className="text-lg text-slate-400">
-                        Total Income
-                    </h2>
+            <div className="grid grid-cols-1 2xl:grid-cols-2 gap-8">
 
-                    <p className="text-3xl font-bold mt-2">
-                        ₹85,000
-                    </p>
-                </div>
+                <ExpensePieChart
+                    data={categoryDistribution}
+                />
 
-                <div className="bg-slate-900 p-6 rounded-xl">
-                    <h2 className="text-lg text-slate-400">
-                        Total Expense
-                    </h2>
-
-                    <p className="text-3xl font-bold mt-2">
-                        ₹65,000
-                    </p>
-                </div>
-
-                <div className="bg-slate-900 p-6 rounded-xl">
-                    <h2 className="text-lg text-slate-400">
-                        Savings
-                    </h2>
-
-                    <p className="text-3xl font-bold mt-2">
-                        ₹20,000
-                    </p>
-                </div>
+                <MonthlyTrendChart
+                    data={monthlyTrend}
+                />
 
             </div>
+
+            <div className="grid grid-cols-1 2xl:grid-cols-2 gap-8">
+
+                <IncomeExpenseBarChart
+                    data={incomeExpenseData}
+                />
+
+                <SavingsTrendAreaChart
+                    data={savingsTrendData}
+                />
+
+            </div>
+
+            <CategoryComparisonChart
+                data={categoryComparisonData}
+            />
+
+            <AIInsightCard
+                summary={aiSummary}
+            />
+
+            <div className="grid grid-cols-1 2xl:grid-cols-2 gap-8">
+
+                <AnomalyCard
+                    anomalies={anomalies}
+                />
+
+                <RecurringPaymentsCard
+                    recurring={recurringPayments}
+                />
+
+            </div>
+
+            <TransactionTable
+                transactions={transactions}
+            />
 
         </div>
     );
