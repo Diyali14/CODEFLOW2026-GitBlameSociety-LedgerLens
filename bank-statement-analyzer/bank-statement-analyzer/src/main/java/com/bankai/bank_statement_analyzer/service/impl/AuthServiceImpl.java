@@ -12,6 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import com.bankai.bank_statement_analyzer.exception.ApiException;
+
 
 @Service
 @RequiredArgsConstructor
@@ -27,11 +29,11 @@ public class AuthServiceImpl implements AuthService {
     public SignupResponse signup(SignupRequest request) {
 
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new RuntimeException("Username already exists");
+            throw new ApiException("Username already exists");
         }
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already exists");
+            throw new ApiException("Email already exists");
         }
 
         User user = User.builder()
