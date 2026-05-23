@@ -15,7 +15,12 @@ public class TransactionCleaner {
      //       DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     public Transaction clean(RawTransactionDto raw) {
+        if (!isValidTransactionDate(raw.getDate())) {
 
+            throw new RuntimeException(
+                    "Invalid transaction row skipped"
+            );
+        }
         return Transaction.builder()
                 .txnDate(parseDate(raw.getDate()))
                 .narration(cleanNarration(raw.getNarration()))
@@ -29,6 +34,10 @@ public class TransactionCleaner {
     private LocalDate parseDate(String date) {
 
         String cleanedDate = date.trim();
+        cleanedDate = cleanedDate
+                .replace("\n", "")
+                .replace("\r", "")
+                .replace(" ", "");
 
         DateTimeFormatter[] formatters = {
                 DateTimeFormatter.ofPattern("dd/MM/yyyy"),
@@ -70,5 +79,18 @@ public class TransactionCleaner {
                 .trim();
 
         return new BigDecimal(cleaned);
+    }
+
+    private boolean isValidTransactionDate(String text) {
+
+        if (text == null || text.isBlank()) {
+            return false;
+        }
+
+        String cleaned = text.trim();
+
+        return cleaned.matches("\\d{2}[-/]\\w+[-/]\\d{4}")
+                ||
+                cleaned.matches("\\d{2}[-/]\\d{2}[-/]\\d{4}");
     }
 }

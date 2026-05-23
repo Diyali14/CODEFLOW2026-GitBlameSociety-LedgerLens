@@ -4,6 +4,7 @@ import com.bankai.bank_statement_analyzer.dto.pdf.RawTransactionDto;
 import com.bankai.bank_statement_analyzer.entity.Transaction;
 import com.bankai.bank_statement_analyzer.pdf.PdfExtractorService;
 import com.bankai.bank_statement_analyzer.repository.TransactionRepository;
+import com.bankai.bank_statement_analyzer.service.CategoryPredictionService;
 import com.bankai.bank_statement_analyzer.service.StatementService;
 import com.bankai.bank_statement_analyzer.util.TransactionCleaner;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class StatementServiceImpl implements StatementService {
+
+    private final CategoryPredictionService
+            categoryPredictionService;
 
     private final PdfExtractorService pdfExtractorService;
 
@@ -30,10 +34,23 @@ public class StatementServiceImpl implements StatementService {
 
         for (RawTransactionDto raw : rawTransactions) {
 
-            Transaction transaction =
-                    transactionCleaner.clean(raw);
+            try {
 
-            transactionRepository.save(transaction);
+                Transaction transaction =
+                        transactionCleaner.clean(raw);
+
+                transactionRepository.save(transaction);
+
+            } catch (Exception e) {
+
+                System.out.println(
+                        "Skipping invalid row: "
+                                + raw.getDate()
+                );
+            }
         }
+
+        categoryPredictionService.predictAndSaveCategories();
+
     }
 }

@@ -1,0 +1,25 @@
+package com.bankai.bank_statement_analyzer.ai;
+
+import com.bankai.bank_statement_analyzer.dto.ai.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+
+@Service
+@RequiredArgsConstructor
+public class AiServiceClient {
+
+    private final WebClient webClient;
+
+    public CategoryPredictionResponse predictCategories(
+            CategoryPredictionRequest request
+    ) {
+
+        return webClient.post()
+                .uri("/predict-category")
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(CategoryPredictionResponse.class)
+                .block();
+    }
+}
