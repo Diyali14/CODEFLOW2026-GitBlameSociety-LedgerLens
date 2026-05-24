@@ -7,9 +7,7 @@ import {
     FaRobot,
     FaExclamationTriangle,
     FaSyncAlt,
-    FaFileInvoice,
     FaUser,
-    FaCog,
     FaUpload,
     FaBars,
     FaTimes,
@@ -28,78 +26,131 @@ function Sidebar() {
         { name: "AI Recommendations", path: "/recommendations", icon: <FaRobot /> },
         { name: "Anomalies", path: "/anomalies", icon: <FaExclamationTriangle /> },
         { name: "Recurring", path: "/recurring", icon: <FaSyncAlt /> },
-        { name: "Reports", path: "/reports", icon: <FaFileInvoice /> },
         { name: "Profile", path: "/profile", icon: <FaUser /> },
-        { name: "Settings", path: "/settings", icon: <FaCog /> },
     ];
 
     return (
         <>
 
-            {/* Mobile top bar */}
-            <div className="lg:hidden flex items-center justify-between p-4 border-b border-emerald-100 bg-white/70 backdrop-blur-xl sticky top-0 z-50">
+            {/* Mobile Top Bar */}
+            <div className="
+                lg:hidden
+                sticky top-0 z-50
+                flex items-center justify-between
+                px-5 py-4
+                border-b border-slate-200/70
+                bg-white/80 backdrop-blur-2xl
+            ">
 
-                <h1 className="text-xl font-semibold text-emerald-700">
-                    LedgerLens
-                </h1>
+                <div>
+                    <h1 className="text-xl font-bold tracking-tight text-slate-900">
+                        LedgerLens
+                    </h1>
+
+                    <p className="text-xs text-slate-500">
+                        Smart Finance Analytics
+                    </p>
+                </div>
 
                 <button
                     onClick={() => setOpen(true)}
-                    className="p-2 rounded-xl bg-emerald-50 text-emerald-700"
+                    className="
+                        flex items-center justify-center
+                        w-11 h-11
+                        rounded-2xl
+                        bg-linear-to-br
+                        from-emerald-500
+                        to-emerald-600
+                        text-white
+                        shadow-[0_10px_25px_rgba(16,185,129,0.35)]
+                    "
                 >
                     <FaBars />
                 </button>
 
             </div>
 
-            {/* overlay */}
+            {/* Overlay */}
             {open && (
                 <div
                     onClick={() => setOpen(false)}
-                    className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 lg:hidden"
+                    className="
+                        fixed inset-0 z-40
+                        bg-black/30 backdrop-blur-sm
+                        lg:hidden
+                    "
                 />
             )}
 
-            {/* sidebar */}
-            <div className={`
-                fixed lg:static z-50
-                top-0 left-0 h-full w-72
-                transform transition-transform duration-300
-                ${open ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
-            `}>
+            {/* Sidebar */}
+            <div
+                className={`
+                    fixed lg:relative
+                    top-0 left-0 z-50
+                    h-full w-72
+                    transform transition-transform duration-300 ease-out
+                    ${open
+                        ? "translate-x-0"
+                        : "-translate-x-full lg:translate-x-0"
+                    }
+                `}
+            >
 
-                <div className="
-                    h-full flex flex-col p-5
-                    bg-white/70 backdrop-blur-2xl
-                    border-r border-emerald-100
-                    shadow-[0_20px_60px_rgba(16,185,129,0.08)]
-                ">
+                <div
+                    className="
+                        relative
+                        h-screen w-full
+                        flex flex-col
+                        px-5 py-6
+                        bg-white/80 backdrop-blur-3xl
+                        border-r border-slate-200/70
+                        shadow-[0_8px_40px_rgba(15,23,42,0.08)]
+                        overflow-hidden
+                    "
+                >
 
-                    {/* close button (mobile only) */}
-                    <div className="lg:hidden flex justify-end mb-4">
+                    {/* Ambient Glow Effects */}
+                    <div className="absolute -top-24 -left-24 w-72 h-72 bg-emerald-300/20 blur-[140px]" />
+
+                    <div className="absolute bottom-0 right-0 w-60 h-60 bg-cyan-200/10 blur-[120px]" />
+
+                    {/* Close Button (Mobile Only) */}
+                    <div className="lg:hidden flex justify-end relative z-10 mb-4">
+
                         <button
                             onClick={() => setOpen(false)}
-                            className="p-2 rounded-xl bg-emerald-50 text-emerald-700"
+                            className="
+                                flex items-center justify-center
+                                w-11 h-11
+                                rounded-2xl
+                                bg-slate-100
+                                text-slate-700
+                            "
                         >
                             <FaTimes />
                         </button>
+
                     </div>
 
-                    {/* glow */}
-                    <div className="absolute -top-20 -left-20 w-60 h-60 bg-emerald-300/20 blur-[120px]" />
+                    {/* Logo */}
+                    <div className="relative z-10 mb-10">
 
-                    {/* logo */}
-                    <div className="mb-10 relative z-10">
-                        <h1 className="text-3xl font-semibold text-emerald-700 tracking-tight">
-                            LedgerLens
+                        <h1 className="
+                            text-3xl font-bold
+                            tracking-tight
+                            text-slate-900
+                        ">
+                            Ledger<span className="text-emerald-600">Lens</span>
                         </h1>
-                        <p className="text-slate-500 mt-1 text-sm">
-                            Smart Finance Analytics
+
+                        <p className="mt-2 text-sm text-slate-500 leading-relaxed">
+                            AI-powered finance intelligence dashboard
                         </p>
+
                     </div>
 
-                    {/* menu */}
-                    <div className="flex flex-col gap-2 relative z-10">
+                    {/* Navigation */}
+                    <div className="relative z-10 flex-1 flex flex-col gap-2">
 
                         {menuItems.map((item) => {
 
@@ -111,25 +162,50 @@ function Sidebar() {
                                     to={item.path}
                                     onClick={() => setOpen(false)}
                                     className={`
-                                        flex items-center gap-4 px-4 py-3 rounded-2xl
-                                        transition-all font-medium text-sm
-                                        relative overflow-hidden
+                                        group relative overflow-hidden
+                                        flex items-center gap-4
+                                        px-4 py-3.5
+                                        rounded-2xl
+                                        transition-all duration-300
+                                        font-medium text-sm
                                         ${active
-                                            ? "bg-emerald-600 text-white shadow-md shadow-emerald-200"
-                                            : "text-slate-600 hover:bg-emerald-50"
+                                            ? `
+                                                bg-linear-to-r
+                                                from-emerald-500
+                                                to-emerald-600
+                                                text-white
+                                                shadow-[0_10px_25px_rgba(16,185,129,0.35)]
+                                            `
+                                            : `
+                                                text-slate-600
+                                                hover:bg-slate-100/70
+                                                hover:text-slate-900
+                                            `
                                         }
                                     `}
                                 >
 
-                                    {/* active glow */}
-                                    {active && (
-                                        <div className="absolute inset-0 bg-linear-to-r from-emerald-500 to-emerald-600 opacity-90" />
+                                    {/* Hover Glow */}
+                                    {!active && (
+                                        <div className="
+                                            absolute inset-0
+                                            opacity-0 group-hover:opacity-100
+                                            transition-opacity duration-300
+                                            bg-linear-to-r
+                                            from-emerald-50
+                                            to-transparent
+                                        " />
                                     )}
 
-                                    <span className="text-base relative z-10">
+                                    {/* Icon */}
+                                    <span className="
+                                        relative z-10
+                                        text-base
+                                    ">
                                         {item.icon}
                                     </span>
 
+                                    {/* Label */}
                                     <span className="relative z-10">
                                         {item.name}
                                     </span>
