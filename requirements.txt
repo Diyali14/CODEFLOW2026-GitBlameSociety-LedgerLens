@@ -1,7 +1,6 @@
 fastapi
 uvicorn
+onnxruntime
 transformers
-torch
-accelerate
-sentencepiece
-safetensors
+numpy
+pydantic

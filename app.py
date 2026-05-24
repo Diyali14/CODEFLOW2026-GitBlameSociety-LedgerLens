@@ -1,27 +1,21 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-
-from transformers import (
-    DistilBertTokenizerFast,
-    DistilBertForSequenceClassification
-)
-
-import torch
-import torch.nn.functional as F
+import onnxruntime as ort
+import numpy as np
+import json
+from transformers import AutoTokenizer
 
 app = FastAPI()
 
-MODEL_PATH = "./transaction-model"
+# Load tokenizer
+tokenizer = AutoTokenizer.from_pretrained("distilroberta-base")
 
-tokenizer = DistilBertTokenizerFast.from_pretrained(MODEL_PATH)
+# Load ONNX model
+session = ort.InferenceSession("model.onnx")
 
-model = DistilBertForSequenceClassification.from_pretrained(
-    MODEL_PATH
-)
-
-model.eval()
-
-id2label = model.config.id2label
+# Load labels
+with open("label_map.json", "r") as f:
+    id2label = json.load(f)
 
 
 class Transaction(BaseModel):
@@ -29,45 +23,49 @@ class Transaction(BaseModel):
     narration: str
 
 
-class RequestBody(BaseModel):
+class Request(BaseModel):
     transactions: list[Transaction]
 
 
-@app.get("/")
-def home():
-    return {
-        "message": "Transaction Category AI Running"
-    }
+def predict(text: str):
+    inputs = tokenizer(
+        text,
+        return_tensors="np",
+        padding="max_length",
+        truncation=True,
+        max_length=32
+    )
+
+    outputs = session.run(
+        None,
+        {
+            "input_ids": inputs["input_ids"].astype(np.int64),
+            "attention_mask": inputs["attention_mask"].astype(np.int64)
+        }
+    )
+
+    logits = outputs[0]
+
+    probs = np.exp(logits) / np.sum(np.exp(logits), axis=1, keepdims=True)
+
+    pred_id = str(int(np.argmax(probs)))
+    confidence = float(np.max(probs))
+
+    return id2label[pred_id], confidence
 
 
-@app.post("/predict-category")
-def predict(data: RequestBody):
+@app.post("/predict")
+def predict_batch(req: Request):
 
-    predictions = []
+    results = []
 
-    for txn in data.transactions:
+    for t in req.transactions:
+        category, conf = predict(t.narration)
 
-        inputs = tokenizer(
-            txn.narration.lower(),
-            return_tensors="pt",
-            truncation=True,
-            padding=True,
-            max_length=32
-        )
-
-        with torch.no_grad():
-            outputs = model(**inputs)
-
-        probs = F.softmax(outputs.logits, dim=1)
-
-        confidence, predicted_class = torch.max(probs, dim=1)
-
-        predictions.append({
-            "transactionId": txn.transactionId,
-            "category": id2label[predicted_class.item()],
-            "confidence": round(confidence.item(), 2)
+        results.append({
+            "transactionId": t.transactionId,
+            "category": category,
+            "confidence": round(conf, 4)
         })
 
-    return {
-        "predictions": predictions
-    }
+    return {"predictions": results}
