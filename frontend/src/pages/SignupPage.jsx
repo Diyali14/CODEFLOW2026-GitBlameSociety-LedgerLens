@@ -15,37 +15,35 @@ function SignupPage() {
     const [loading, setLoading] = useState(false);
 
     const handleSignup = async (data) => {
-
         try {
-
             setLoading(true);
 
-            const response = await signup(data);
+            const payload = {
+                username: data.username.trim(),
+                email: data.email.trim(),
+                password: data.password,
+            };
 
-            if (response.success) {
+            const response = await signup(payload);
 
-                toast.success(response.message);
+            console.log("SIGNUP RESPONSE:", response);
 
+            if (response?.message?.toLowerCase().includes("success")) {
+                toast.success(response.message || "Account created successfully");
                 navigate("/login");
-
             } else {
-
-                toast.error(response.message);
+                toast.error(response?.message || "Signup failed");
             }
 
         } catch (error) {
-
+            console.error(error);
             toast.error(
-                error.response?.data?.message ||
-                "Signup failed"
+                error?.response?.data?.message || "Unable to create account"
             );
-
         } finally {
-
             setLoading(false);
         }
     };
-
     return (
         <div className="relative min-h-screen overflow-hidden bg-[#f7faf7] flex items-center justify-center px-4">
 

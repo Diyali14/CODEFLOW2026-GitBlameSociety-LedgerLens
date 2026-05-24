@@ -15,33 +15,29 @@ function LoginPage() {
     const [loading, setLoading] = useState(false);
 
     const handleLogin = async (data) => {
-
         try {
-
             setLoading(true);
 
-            const response = await login(data);
+            const payload = {
+                username: data.username.trim(),
+                password: data.password,
+            };
 
-            if (response.success) {
+            const response = await login(payload);
 
-                toast.success(response.message);
-
-                navigate("/dashboard");
-
+            if (response?.username) {
+                toast.success(response.message || "Login successful");
+                navigate("/upload");
             } else {
-
-                toast.error(response.message);
+                toast.error(response?.message || "Invalid credentials");
             }
 
         } catch (error) {
-
+            console.error(error);
             toast.error(
-                error.response?.data?.message ||
-                "Login failed"
+                error?.response?.data?.message || "Login failed"
             );
-
         } finally {
-
             setLoading(false);
         }
     };

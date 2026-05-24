@@ -8,6 +8,7 @@ function LoginForm({
     const {
         register,
         handleSubmit,
+        formState: { errors },
     } = useForm();
 
     return (
@@ -26,7 +27,10 @@ function LoginForm({
                 <input
                     type="text"
                     placeholder="Enter your username"
-                    {...register("username")}
+                    {...register("username", {
+                        required:
+                            "Username is required",
+                    })}
                     className="
                         w-full
                         rounded-2xl
@@ -44,6 +48,12 @@ function LoginForm({
                         hover:border-emerald-200
                     "
                 />
+
+                {errors.username && (
+                    <p className="mt-2 text-sm text-red-500">
+                        {errors.username.message}
+                    </p>
+                )}
 
             </div>
 
@@ -57,7 +67,10 @@ function LoginForm({
                 <input
                     type="password"
                     placeholder="Enter your password"
-                    {...register("password")}
+                    {...register("password", {
+                        required:
+                            "Password is required",
+                    })}
                     className="
                         w-full
                         rounded-2xl
@@ -76,10 +89,17 @@ function LoginForm({
                     "
                 />
 
+                {errors.password && (
+                    <p className="mt-2 text-sm text-red-500">
+                        {errors.password.message}
+                    </p>
+                )}
+
             </div>
 
-            {/* Button */}
+            {/* Submit */}
             <button
+                type="submit"
                 disabled={loading}
                 className="
                     relative
@@ -106,7 +126,9 @@ function LoginForm({
                 <div className="absolute inset-0 bg-linear-to-r from-white/10 via-white/5 to-transparent opacity-40" />
 
                 <span className="relative z-10">
-                    {loading ? "Logging in..." : "Login"}
+                    {loading
+                        ? "Logging in..."
+                        : "Login"}
                 </span>
 
             </button>

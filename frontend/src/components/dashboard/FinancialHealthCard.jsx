@@ -1,6 +1,5 @@
-function FinancialHealthCard() {
-
-    const score = 78;
+function FinancialHealthCard({ data }) {
+    const score = data?.score;
 
     return (
         <div className="
@@ -28,7 +27,7 @@ function FinancialHealthCard() {
                 <div className="flex justify-between text-sm text-slate-600 mb-3">
                     <span>Overall Score</span>
                     <span className="font-semibold text-emerald-700">
-                        {score}/100
+                        {score ?? "..."}/100
                     </span>
                 </div>
 

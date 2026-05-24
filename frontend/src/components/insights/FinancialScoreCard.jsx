@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 function FinancialScoreCard({ data }) {
 
@@ -9,7 +9,8 @@ function FinancialScoreCard({ data }) {
 
         let start = 0;
 
-        const end = data.score;
+        const end =
+            data?.score || 0;
 
         const duration = 1500;
 
@@ -41,7 +42,7 @@ function FinancialScoreCard({ data }) {
         return () =>
             clearInterval(timer);
 
-    }, [data.score]);
+    }, [data?.score]);
 
     const radius = 85;
 
@@ -53,111 +54,319 @@ function FinancialScoreCard({ data }) {
         (progress / 100) *
         circumference;
 
+    const healthLabel = useMemo(() => {
+
+        if (progress >= 85)
+            return "Excellent";
+
+        if (progress >= 70)
+            return "Good";
+
+        if (progress >= 55)
+            return "Moderate";
+
+        if (progress >= 40)
+            return "Risky";
+
+        return "Critical";
+
+    }, [progress]);
+
+    const scoreColor = useMemo(() => {
+
+        if (progress >= 85)
+            return "#16A34A";
+
+        if (progress >= 70)
+            return "#22C55E";
+
+        if (progress >= 55)
+            return "#EAB308";
+
+        if (progress >= 40)
+            return "#F97316";
+
+        return "#EF4444";
+
+    }, [progress]);
+
     return (
-        <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
+        <div className="
+            relative overflow-hidden
+            bg-white rounded-4xl
+            border border-slate-200
+            p-8 shadow-sm
+        ">
 
-            <h2 className="text-3xl font-bold text-slate-800">
-                Financial Health Score
-            </h2>
+            {/* ambient glow */}
+            <div className="
+                absolute -top-24 right-0
+                w-72 h-72
+                bg-green-200/30
+                blur-3xl
+                rounded-full
+            " />
 
-            <div className="mt-8 flex items-center justify-center">
+            <div className="relative z-10">
 
-                <div className="relative w-56 h-56 flex items-center justify-center">
+                {/* HEADER */}
+                <div className="flex items-start justify-between gap-4">
 
-                    <svg
-                        className="absolute top-0 left-0 w-full h-full -rotate-90"
-                        viewBox="0 0 220 220"
-                    >
+                    <div>
 
-                        {/* Background Circle */}
-                        <circle
-                            cx="110"
-                            cy="110"
-                            r={radius}
-                            stroke="#E2E8F0"
-                            strokeWidth="14"
-                            fill="none"
-                        />
+                        <h2 className="text-3xl font-bold text-slate-800 tracking-[-0.03em]">
+                            Financial Health Score
+                        </h2>
 
-                        {/* Animated Progress Circle */}
-                        <circle
-                            cx="110"
-                            cy="110"
-                            r={radius}
-                            stroke="#22C55E"
-                            strokeWidth="14"
-                            fill="none"
-                            strokeLinecap="round"
-                            strokeDasharray={circumference}
-                            strokeDashoffset={strokeDashoffset}
-                            className="transition-all duration-300 ease-out"
-                        />
-
-                    </svg>
-
-                    <div className="z-10">
-
-                        <h1 className="text-5xl font-bold text-green-700 text-center">
-                            {progress}
-                        </h1>
-
-                        <p className="text-slate-500 text-center mt-2">
-                            Score
+                        <p className="text-slate-500 mt-2">
+                            AI-powered financial wellness analysis
                         </p>
+
+                    </div>
+
+                    <div className={`
+                        px-4 py-2 rounded-full text-sm font-semibold border
+                        ${progress >= 85
+                            ? "bg-green-50 text-green-700 border-green-100"
+                            : progress >= 70
+                                ? "bg-emerald-50 text-emerald-700 border-emerald-100"
+                                : progress >= 55
+                                    ? "bg-yellow-50 text-yellow-700 border-yellow-100"
+                                    : progress >= 40
+                                        ? "bg-orange-50 text-orange-700 border-orange-100"
+                                        : "bg-red-50 text-red-700 border-red-100"
+                        }
+                    `}>
+                        {healthLabel}
+                    </div>
+
+                </div>
+
+                {/* SCORE CIRCLE */}
+                <div className="mt-10 flex items-center justify-center">
+
+                    <div className="
+                        relative
+                        w-64 h-64
+                        flex items-center justify-center
+                    ">
+
+                        <svg
+                            className="
+                                absolute top-0 left-0
+                                w-full h-full
+                                -rotate-90
+                            "
+                            viewBox="0 0 220 220"
+                        >
+
+                            {/* Background */}
+                            <circle
+                                cx="110"
+                                cy="110"
+                                r={radius}
+                                stroke="#E2E8F0"
+                                strokeWidth="14"
+                                fill="none"
+                            />
+
+                            {/* Progress */}
+                            <circle
+                                cx="110"
+                                cy="110"
+                                r={radius}
+                                stroke={scoreColor}
+                                strokeWidth="14"
+                                fill="none"
+                                strokeLinecap="round"
+                                strokeDasharray={circumference}
+                                strokeDashoffset={strokeDashoffset}
+                                className="
+                                    transition-all
+                                    duration-500
+                                    ease-out
+                                "
+                            />
+
+                        </svg>
+
+                        {/* CENTER CONTENT */}
+                        <div className="z-10 text-center">
+
+                            <h1
+                                className="text-6xl font-bold"
+                                style={{
+                                    color: scoreColor,
+                                }}
+                            >
+                                {progress}
+                            </h1>
+
+                            <p className="text-slate-500 mt-2">
+                                /100 Score
+                            </p>
+
+                        </div>
 
                     </div>
 
                 </div>
 
-            </div>
+                {/* BREAKDOWN GRID */}
+                <div className="
+                    grid grid-cols-1 md:grid-cols-2
+                    gap-5 mt-12
+                ">
 
-            <div className="grid grid-cols-2 gap-5 mt-10">
+                    {/* Savings Ratio */}
+                    <div className="
+                        bg-green-50/70
+                        border border-green-100
+                        rounded-3xl
+                        p-6
+                    ">
 
-                <div className="bg-slate-100 rounded-2xl p-5">
+                        <p className="text-slate-500 text-sm">
+                            Savings Ratio Score
+                        </p>
 
-                    <p className="text-slate-500">
-                        Savings Ratio
-                    </p>
+                        <h3 className="text-3xl font-bold text-green-700 mt-3">
+                            {
+                                data?.breakdown
+                                    ?.savingsRatioScore || 0
+                            }
+                        </h3>
 
-                    <h3 className="text-2xl font-bold text-green-700 mt-2">
-                        {data.savingsRatio}%
-                    </h3>
+                        <p className="text-sm text-slate-500 mt-2">
+                            Measures how much income is saved.
+                        </p>
 
-                </div>
+                    </div>
 
-                <div className="bg-slate-100 rounded-2xl p-5">
+                    {/* Expense Trend */}
+                    <div className="
+                        bg-blue-50/70
+                        border border-blue-100
+                        rounded-3xl
+                        p-6
+                    ">
 
-                    <p className="text-slate-500">
-                        Expense Stability
-                    </p>
+                        <p className="text-slate-500 text-sm">
+                            Expense Stability
+                        </p>
 
-                    <h3 className="text-2xl font-bold text-green-700 mt-2">
-                        {data.expenseStability}
-                    </h3>
+                        <h3 className="text-3xl font-bold text-blue-700 mt-3">
+                            {
+                                data?.breakdown
+                                    ?.expenseTrendScore || 0
+                            }
+                        </h3>
 
-                </div>
+                        <p className="text-sm text-slate-500 mt-2">
+                            Detects aggressive expense growth.
+                        </p>
 
-                <div className="bg-slate-100 rounded-2xl p-5">
+                    </div>
 
-                    <p className="text-slate-500">
-                        Risk Level
-                    </p>
+                    {/* Category Dominance */}
+                    <div className="
+                        bg-orange-50/70
+                        border border-orange-100
+                        rounded-3xl
+                        p-6
+                    ">
 
-                    <h3 className="text-2xl font-bold text-orange-500 mt-2">
-                        {data.anomalyRisk}
-                    </h3>
+                        <p className="text-slate-500 text-sm">
+                            Spending Diversification
+                        </p>
 
-                </div>
+                        <h3 className="text-3xl font-bold text-orange-600 mt-3">
+                            {
+                                data?.breakdown
+                                    ?.categoryDominanceScore || 0
+                            }
+                        </h3>
 
-                <div className="bg-slate-100 rounded-2xl p-5">
+                        <p className="text-sm text-slate-500 mt-2">
+                            Penalizes overspending concentration.
+                        </p>
 
-                    <p className="text-slate-500">
-                        Recurring Load
-                    </p>
+                    </div>
 
-                    <h3 className="text-2xl font-bold text-blue-600 mt-2">
-                        {data.recurringLoad}
-                    </h3>
+                    {/* Recurring Load */}
+                    <div className="
+                        bg-violet-50/70
+                        border border-violet-100
+                        rounded-3xl
+                        p-6
+                    ">
+
+                        <p className="text-slate-500 text-sm">
+                            Recurring Stability
+                        </p>
+
+                        <h3 className="text-3xl font-bold text-violet-700 mt-3">
+                            {
+                                data?.breakdown
+                                    ?.recurringScore || 0
+                            }
+                        </h3>
+
+                        <p className="text-sm text-slate-500 mt-2">
+                            Measures subscription & EMI pressure.
+                        </p>
+
+                    </div>
+
+                    {/* Anomaly */}
+                    <div className="
+                        bg-red-50/70
+                        border border-red-100
+                        rounded-3xl
+                        p-6
+                    ">
+
+                        <p className="text-slate-500 text-sm">
+                            Anomaly Score
+                        </p>
+
+                        <h3 className="text-3xl font-bold text-red-600 mt-3">
+                            {
+                                data?.breakdown
+                                    ?.anomalyScore || 0
+                            }
+                        </h3>
+
+                        <p className="text-sm text-slate-500 mt-2">
+                            AI-detected suspicious behavior analysis.
+                        </p>
+
+                    </div>
+
+                    {/* Liquidity */}
+                    <div className="
+                        bg-cyan-50/70
+                        border border-cyan-100
+                        rounded-3xl
+                        p-6
+                    ">
+
+                        <p className="text-slate-500 text-sm">
+                            Liquidity Reserve
+                        </p>
+
+                        <h3 className="text-3xl font-bold text-cyan-700 mt-3">
+                            {
+                                data?.breakdown
+                                    ?.liquidityScore || 0
+                            }
+                        </h3>
+
+                        <p className="text-sm text-slate-500 mt-2">
+                            Measures emergency reserve readiness.
+                        </p>
+
+                    </div>
 
                 </div>
 

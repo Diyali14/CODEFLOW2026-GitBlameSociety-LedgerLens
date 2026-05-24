@@ -17,9 +17,7 @@ import InsightsPage from "../pages/InsightsPage";
 import AIRecommendationsPage from "../pages/AIRecommendationsPage";
 import AnomaliesPage from "../pages/AnomaliesPage";
 import RecurringPage from "../pages/RecurringPaymentsPage";
-import ReportsPage from "../pages/ReportsPage";
 import ProfilePage from "../pages/ProfilePage";
-import SettingsPage from "../pages/SettingsPage";
 import NotFoundPage from "../pages/NotFoundPage";
 
 import ProtectedRoute from "./ProtectedRoute";
@@ -40,9 +38,9 @@ function AppRoutes() {
 
                 <Route
                     element={
-                        // <ProtectedRoute>
+                        <ProtectedRoute>
                             <DashboardLayout />
-                        //</ProtectedRoute>
+                        </ProtectedRoute>
                     }
                 >
 
@@ -53,9 +51,7 @@ function AppRoutes() {
                     <Route path="/recommendations" element={<AIRecommendationsPage />} />
                     <Route path="/anomalies" element={<AnomaliesPage />} />
                     <Route path="/recurring" element={<RecurringPage />} />
-                    <Route path="/reports" element={<ReportsPage />} />
                     <Route path="/profile" element={<ProfilePage />} />
-                    <Route path="/settings" element={<SettingsPage />} />
 
                 </Route>
 

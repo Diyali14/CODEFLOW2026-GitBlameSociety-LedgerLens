@@ -29,11 +29,13 @@ function TransactionFilters({
 
                 <select value={category} onChange={(e) => setCategory(e.target.value)} className="input">
                     <option value="">All Categories</option>
-                    <option>Food</option>
-                    <option>Shopping</option>
-                    <option>Travel</option>
-                    <option>Bills</option>
-                    <option>Subscription</option>
+                    <option value="FOOD">Food</option>
+                    <option value="SHOPPING">Shopping</option>
+                    <option value="TRAVEL">Travel</option>
+                    <option value="UTILITIES">Utilities</option>
+                    <option value="TRANSFER">Transfer</option>
+                    <option value="EMI">EMI</option>
+                    <option value="OTHERS">Others</option>
                 </select>
 
                 <select value={status} onChange={(e) => setStatus(e.target.value)} className="input">

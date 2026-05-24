@@ -8,6 +8,7 @@ function SignupForm({
     const {
         register,
         handleSubmit,
+        formState: { errors },
     } = useForm();
 
     return (
@@ -26,7 +27,14 @@ function SignupForm({
                 <input
                     type="text"
                     placeholder="Choose a username"
-                    {...register("username")}
+                    {...register("username", {
+                        required: "Username is required",
+                        minLength: {
+                            value: 3,
+                            message:
+                                "Username must be at least 3 characters",
+                        },
+                    })}
                     className="
                         w-full
                         rounded-2xl
@@ -44,6 +52,12 @@ function SignupForm({
                         hover:border-emerald-200
                     "
                 />
+
+                {errors.username && (
+                    <p className="mt-2 text-sm text-red-500">
+                        {errors.username.message}
+                    </p>
+                )}
 
             </div>
 
@@ -57,7 +71,15 @@ function SignupForm({
                 <input
                     type="email"
                     placeholder="Enter your email"
-                    {...register("email")}
+                    {...register("email", {
+                        required: "Email is required",
+                        pattern: {
+                            value:
+                                /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                            message:
+                                "Enter a valid email",
+                        },
+                    })}
                     className="
                         w-full
                         rounded-2xl
@@ -75,6 +97,12 @@ function SignupForm({
                         hover:border-emerald-200
                     "
                 />
+
+                {errors.email && (
+                    <p className="mt-2 text-sm text-red-500">
+                        {errors.email.message}
+                    </p>
+                )}
 
             </div>
 
@@ -88,7 +116,14 @@ function SignupForm({
                 <input
                     type="password"
                     placeholder="Create a password"
-                    {...register("password")}
+                    {...register("password", {
+                        required: "Password is required",
+                        minLength: {
+                            value: 6,
+                            message:
+                                "Password must be at least 6 characters",
+                        },
+                    })}
                     className="
                         w-full
                         rounded-2xl
@@ -107,10 +142,17 @@ function SignupForm({
                     "
                 />
 
+                {errors.password && (
+                    <p className="mt-2 text-sm text-red-500">
+                        {errors.password.message}
+                    </p>
+                )}
+
             </div>
 
             {/* Button */}
             <button
+                type="submit"
                 disabled={loading}
                 className="
                     relative
@@ -133,11 +175,12 @@ function SignupForm({
                 "
             >
 
-                {/* Glow overlay */}
                 <div className="absolute inset-0 bg-linear-to-r from-white/10 via-white/5 to-transparent opacity-40" />
 
                 <span className="relative z-10">
-                    {loading ? "Creating..." : "Create Account"}
+                    {loading
+                        ? "Creating Account..."
+                        : "Create Account"}
                 </span>
 
             </button>

@@ -1,6 +1,6 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 
-import { allTransactions } from "../data/dummyData";
+import { getTransactionsApi } from "../api/analytics";
 
 import TransactionStats from "../components/transactions/TransactionStats";
 import TransactionFilters from "../components/transactions/TransactionFilters";
@@ -11,11 +11,78 @@ import EmptyTransactions from "../components/transactions/EmptyTransactions";
 
 function TransactionsPage() {
 
+    const [
+        allTransactions,
+        setAllTransactions,
+    ] = useState([]);
+
+    const [loading, setLoading] =
+        useState(true);
+
     const [search, setSearch] = useState("");
     const [category, setCategory] = useState("");
     const [status, setStatus] = useState("");
     const [sortOrder, setSortOrder] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
+
+    useEffect(() => {
+        fetchTransactions();
+    }, []);
+
+    const fetchTransactions =
+        async () => {
+
+            try {
+
+                setLoading(true);
+
+                const response =
+                    await getTransactionsApi();
+
+                const formattedData =
+                    response.map(
+                        (txn, index) => ({
+                            transactionId:
+                                index + 1,
+
+                            date:
+                                txn.date,
+
+                            narration:
+                                txn.narration,
+
+                            category:
+                                txn.category,
+
+                            debit:
+                                Number(
+                                    txn.debit
+                                ),
+
+                            credit:
+                                Number(
+                                    txn.credit
+                                ),
+
+                            anomaly:
+                                txn.status,
+                        })
+                    );
+
+                setAllTransactions(
+                    formattedData
+                );
+
+            } catch (error) {
+
+                console.error(error);
+
+            } finally {
+
+                setLoading(false);
+
+            }
+        };
 
     const itemsPerPage = 10;
 
@@ -25,33 +92,70 @@ function TransactionsPage() {
 
         if (search) {
             filtered = filtered.filter(txn =>
-                txn.narration.toLowerCase().includes(search.toLowerCase())
+                txn.narration.toLowerCase().includes(
+                    search.toLowerCase()
+                )
             );
         }
 
         if (category) {
-            filtered = filtered.filter(txn => txn.category === category);
+            filtered = filtered.filter(
+                txn => txn.category === category
+            );
         }
 
         if (status === "anomaly") {
-            filtered = filtered.filter(txn => txn.anomaly);
+            filtered = filtered.filter(
+                txn => txn.anomaly
+            );
         }
 
         if (status === "normal") {
-            filtered = filtered.filter(txn => !txn.anomaly);
+            filtered = filtered.filter(
+                txn => !txn.anomaly
+            );
         }
 
         if (sortOrder === "high") {
-            filtered.sort((a, b) => b.debit - a.debit);
+            filtered.sort(
+                (a, b) => b.debit - a.debit
+            );
         }
 
         if (sortOrder === "low") {
-            filtered.sort((a, b) => a.debit - b.debit);
+            filtered.sort(
+                (a, b) => a.debit - b.debit
+            );
         }
 
         return filtered;
 
-    }, [search, category, status, sortOrder]);
+    }, [
+        allTransactions,
+        search,
+        category,
+        status,
+        sortOrder
+    ]);
+
+    if (loading) {
+
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+
+                <div className="text-center">
+
+                    <div className="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+
+                    <p className="mt-6 text-slate-600 text-lg">
+                        Loading transactions...
+                    </p>
+
+                </div>
+
+            </div>
+        );
+    }
 
     const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage);
 

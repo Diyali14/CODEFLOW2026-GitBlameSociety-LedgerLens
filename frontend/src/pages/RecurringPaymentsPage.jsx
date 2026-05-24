@@ -1,11 +1,127 @@
-import { recurringSubscriptionsData } from "../data/dummyData";
+import {
+    useEffect,
+    useState,
+} from "react";
+
+import {
+    getRecurringTransactionsApi,
+} from "../api/analytics";
 
 function RecurringPage() {
+
+    const [
+        recurringSubscriptionsData,
+        setRecurringSubscriptionsData,
+    ] = useState([]);
+
+    const [loading, setLoading] =
+        useState(true);
+
+    useEffect(() => {
+        fetchRecurringTransactions();
+    }, []);
+
+    const formatCurrency = (value) => {
+
+        return Number(value).toLocaleString(
+            "en-IN",
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            }
+        );
+    };
+
+    const fetchRecurringTransactions =
+        async () => {
+
+            try {
+
+                setLoading(true);
+
+                const response =
+                    await getRecurringTransactionsApi();
+
+                const filteredData =
+                    response
+                        .filter(
+                            item =>
+                                Number(item.amount) > 0
+                        )
+                        .map(
+                            (
+                                item,
+                                index
+                            ) => ({
+
+                                id:
+                                    index + 1,
+
+                                name:
+                                    item.narration,
+
+                                monthly:
+                                    Number(
+                                        item.amount
+                                    ),
+
+                                yearly:
+                                    Number(
+                                        item.amount
+                                    ) * 12,
+
+                                frequency:
+                                    item.frequency,
+                            })
+                        );
+
+                setRecurringSubscriptionsData(
+                    filteredData
+                );
+
+            } catch (error) {
+
+                console.error(error);
+
+            } finally {
+
+                setLoading(false);
+
+            }
+        };
+
+    if (loading) {
+
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+
+                <div className="text-center">
+
+                    <div className="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+
+                    <p className="mt-6 text-slate-600 text-lg">
+
+                        Loading recurring payments...
+
+                    </p>
+
+                </div>
+
+            </div>
+        );
+    }
 
     const totalYearly =
         recurringSubscriptionsData.reduce(
             (acc, item) =>
                 acc + item.yearly,
+            0
+        );
+
+    const totalMonthly =
+        recurringSubscriptionsData.reduce(
+            (acc, item) =>
+                acc + item.monthly,
             0
         );
 
@@ -102,7 +218,7 @@ function RecurringPage() {
                         </p>
 
                         <h2 className="text-2xl font-medium text-yellow-600 mt-3">
-                            ₹997
+                            ₹{formatCurrency(totalMonthly)}
                         </h2>
 
                     </div>
@@ -129,7 +245,7 @@ function RecurringPage() {
                         </p>
 
                         <h2 className="text-2xl font-medium text-slate-800 mt-3">
-                            ₹{totalYearly}
+                            ₹{formatCurrency(totalYearly)}
                         </h2>
 
                     </div>
@@ -195,7 +311,7 @@ function RecurringPage() {
                                         </span>
 
                                         <span className="font-medium text-slate-900">
-                                            ₹{item.monthly}
+                                            ₹{formatCurrency(item.monthly)}
                                         </span>
 
                                     </div>
@@ -208,20 +324,7 @@ function RecurringPage() {
                                         </span>
 
                                         <span className="font-medium text-red-500">
-                                            ₹{item.yearly}
-                                        </span>
-
-                                    </div>
-
-                                    {/* Renewal */}
-                                    <div className="flex justify-between">
-
-                                        <span className="text-slate-500 text-sm">
-                                            Renewal Date
-                                        </span>
-
-                                        <span className="font-medium text-slate-800">
-                                            {item.renewal}
+                                            ₹{formatCurrency(item.yearly)}
                                         </span>
 
                                     </div>

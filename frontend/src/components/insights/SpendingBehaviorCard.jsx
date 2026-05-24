@@ -18,7 +18,7 @@ function SpendingBehaviorCard({
                     </p>
 
                     <h3 className="text-3xl font-bold text-green-700 mt-2">
-                        {data.topCategory}
+                        {data.category}
                     </h3>
 
                 </div>
@@ -30,7 +30,7 @@ function SpendingBehaviorCard({
                     </p>
 
                     <h3 className="text-3xl font-bold text-slate-800 mt-2">
-                        {data.topPercentage}%
+                        Rs. {data.total}
                     </h3>
 
                 </div>

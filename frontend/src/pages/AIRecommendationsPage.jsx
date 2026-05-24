@@ -1,10 +1,103 @@
+import { useEffect, useState } from "react";
+
 import RecommendationCard from "../components/insights/RecommendationCard";
 
 import {
-    aiRecommendations,
-} from "../data/dummyData";
+    getHighestCategorySpending,
+} from "../api/analytics";
+
+const genericRecommendations = {
+    Food: "Your food spending has been consistently higher than average. Consider reducing frequent online orders, limiting restaurant visits, and setting a fixed weekly dining budget to improve savings.",
+    Shopping: "Your shopping expenses appear elevated. Try delaying non-essential purchases and creating a monthly shopping cap to avoid impulse spending.",
+    Travel: "Travel costs are taking a significant portion of your monthly budget. Planning trips earlier and comparing transport options could help reduce expenses.",
+    Entertainment: "Entertainment expenses are relatively high. Subscriptions and leisure activities can be optimized by prioritizing only the services you actively use.",
+    Bills: "Utility and recurring bill expenses are growing steadily. Reviewing unused subscriptions and monitoring electricity consumption may help lower costs.",
+    Healthcare: "Healthcare-related expenses are higher than usual. Preventive care planning and tracking medical purchases may improve financial balance.",
+    Education: "Educational expenses are contributing heavily to your budget. Reviewing course subscriptions and planning learning investments carefully could help.",
+    Others: "Your miscellaneous expenses are increasing steadily. Tracking smaller transactions more closely may help identify avoidable spending patterns.",
+};
 
 function RecommendationsPage() {
+
+    const [recommendations, setRecommendations] =
+        useState([]);
+
+    const [loading, setLoading] =
+        useState(true);
+
+    useEffect(() => {
+        fetchRecommendations();
+    }, []);
+
+    const fetchRecommendations =
+        async () => {
+
+            try {
+
+                const response =
+                    await getHighestCategorySpending();
+
+                const rawCategory =
+                    response?.category || "Food";
+
+                const highestCategory =
+                    rawCategory.charAt(0).toUpperCase() +
+                    rawCategory.slice(1).toLowerCase();
+
+                const allCategories =
+                    Object.keys(
+                        genericRecommendations
+                    ).filter(
+                        (category) =>
+                            category !== highestCategory
+                    );
+
+                const randomCategory =
+                    allCategories[
+                    Math.floor(
+                        Math.random() *
+                        allCategories.length
+                    )
+                    ];
+
+                const generatedRecommendations = [
+                    {
+                        title: `Reduce ${highestCategory} Expenses`,
+                        impact: "High",
+                        description:
+                            genericRecommendations[
+                            highestCategory
+                            ] ||
+                            genericRecommendations
+                                .Others,
+                    },
+                    {
+                        title: `Improve ${randomCategory} Spending`,
+                        impact: "Moderate",
+                        description:
+                            genericRecommendations[
+                            randomCategory
+                            ] ||
+                            genericRecommendations
+                                .Others,
+                    },
+                ];
+
+                setRecommendations(
+                    generatedRecommendations
+                );
+
+            } catch (error) {
+
+                console.log(error);
+
+            } finally {
+
+                setLoading(false);
+
+            }
+
+        };
 
     return (
         <div className="relative max-w-6xl mx-auto px-4 md:px-6 py-10 space-y-10">
@@ -39,19 +132,29 @@ function RecommendationsPage() {
 
             </div>
 
-            {/* Cards grid */}
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+            {/* Loading */}
+            {loading ? (
 
-                {aiRecommendations.map((item, index) => (
+                <div className="text-center py-20 text-slate-500">
+                    Loading recommendations...
+                </div>
 
-                    <RecommendationCard
-                        key={index}
-                        item={item}
-                    />
+            ) : (
 
-                ))}
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
 
-            </div>
+                    {recommendations.map((item, index) => (
+
+                        <RecommendationCard
+                            key={index}
+                            item={item}
+                        />
+
+                    ))}
+
+                </div>
+
+            )}
 
         </div>
     );
