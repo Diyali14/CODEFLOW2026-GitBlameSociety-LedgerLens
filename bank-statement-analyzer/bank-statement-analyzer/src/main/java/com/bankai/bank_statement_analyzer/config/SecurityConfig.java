@@ -47,7 +47,8 @@ public class SecurityConfig {
                                 "/api/analytics/dashboard",
                                 "/api/analytics/highest-category-spending",
                                 "/api/analytics/transactions-table",
-                                "/api/analytics/recurring-transactions"
+                                "/api/analytics/recurring-transactions",
+                                "/api/anomaly/run"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

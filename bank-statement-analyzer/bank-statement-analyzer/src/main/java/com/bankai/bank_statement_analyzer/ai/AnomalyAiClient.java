@@ -1,31 +1,31 @@
 package com.bankai.bank_statement_analyzer.ai;
 
-import com.bankai.bank_statement_analyzer.dto.ai.*;
+import com.bankai.bank_statement_analyzer.dto.anomaly.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
-public class AiServiceClient {
+public class AnomalyAiClient {
 
     private final WebClient webClient;
 
-    public AiServiceClient(
-            @Qualifier("categoryWebClient")
+    public AnomalyAiClient(
+            @Qualifier("anomalyWebClient")
             WebClient webClient
     ) {
         this.webClient = webClient;
     }
 
-    public CategoryPredictionResponse predictCategories(
-            CategoryPredictionRequest request
+    public AnomalyResponseDTO detectAnomaly(
+            AnomalyApiRequest request
     ) {
 
         return webClient.post()
-                .uri("/predict")
+                .uri("/detect-anomaly")
                 .bodyValue(request)
                 .retrieve()
-                .bodyToMono(CategoryPredictionResponse.class)
+                .bodyToMono(AnomalyResponseDTO.class)
                 .block();
     }
 }

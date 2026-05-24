@@ -8,10 +8,18 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class WebClientConfig {
 
     @Bean
-    public WebClient webClient() {
+    public WebClient categoryWebClient() {
 
         return WebClient.builder()
-                .baseUrl("https://transaction-category-ai.onrender.com")
+                .baseUrl("https://transaction-service-6fuh.onrender.com")
+                .build();
+    }
+
+    @Bean
+    public WebClient anomalyWebClient() {
+
+        return WebClient.builder()
+                .baseUrl("https://anomaly-detection-model-4sk4.onrender.com")
                 .build();
     }
 }
