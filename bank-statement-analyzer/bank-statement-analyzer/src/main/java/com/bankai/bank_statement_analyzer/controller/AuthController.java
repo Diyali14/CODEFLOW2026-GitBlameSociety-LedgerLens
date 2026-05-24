@@ -1,12 +1,12 @@
 package com.bankai.bank_statement_analyzer.controller;
 
-import com.bankai.bank_statement_analyzer.dto.auth.LoginRequest;
-import com.bankai.bank_statement_analyzer.dto.auth.LoginResponse;
-import com.bankai.bank_statement_analyzer.dto.auth.SignupRequest;
-import com.bankai.bank_statement_analyzer.dto.auth.SignupResponse;
+import com.bankai.bank_statement_analyzer.dto.auth.*;
+import com.bankai.bank_statement_analyzer.entity.User;
 import com.bankai.bank_statement_analyzer.service.AuthService;
+import com.bankai.bank_statement_analyzer.service.SessionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+    private final SessionService sessionService;
 
     @PostMapping("/signup")
     public SignupResponse signup(
@@ -28,5 +29,17 @@ public class AuthController {
             @Valid @RequestBody LoginRequest request
     ) {
         return authService.login(request);
+    }
+
+    @GetMapping("/me")
+    public Object getCurrentUser() {
+
+        User user = sessionService.getCurrentUser();
+
+        if (user == null) {
+            return "No user logged in";
+        }
+
+        return user;
     }
 }

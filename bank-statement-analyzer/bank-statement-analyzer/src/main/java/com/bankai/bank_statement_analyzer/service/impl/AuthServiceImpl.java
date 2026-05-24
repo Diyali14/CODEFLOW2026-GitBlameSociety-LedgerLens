@@ -7,6 +7,7 @@ import com.bankai.bank_statement_analyzer.dto.auth.SignupResponse;
 import com.bankai.bank_statement_analyzer.entity.User;
 import com.bankai.bank_statement_analyzer.repository.UserRepository;
 import com.bankai.bank_statement_analyzer.service.AuthService;
+import com.bankai.bank_statement_analyzer.service.SessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ import com.bankai.bank_statement_analyzer.exception.ApiException;
 public class AuthServiceImpl implements AuthService {
 
     private final AuthenticationManager authenticationManager;
-
+    private final SessionService sessionService;
     private final UserRepository userRepository;
 
     private final BCryptPasswordEncoder passwordEncoder;
@@ -49,12 +50,18 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public LoginResponse login(LoginRequest request) {
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
                         request.getPassword()
                 )
         );
+
+        User user = userRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new ApiException("User not found"));
+
+        sessionService.setCurrentUser(user);
 
         return new LoginResponse(
                 "Login successful",
