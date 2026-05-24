@@ -38,9 +38,9 @@ function AppRoutes() {
 
                 <Route
                     element={
-                        <ProtectedRoute>
+                        //<ProtectedRoute>
                             <DashboardLayout />
-                        </ProtectedRoute>
+                        //</ProtectedRoute>
                     }
                 >
 

@@ -27,7 +27,7 @@ function LoginPage() {
 
             if (response?.username) {
                 toast.success(response.message || "Login successful");
-                navigate("/upload");
+                navigate("/upload", { replace: true });
             } else {
                 toast.error(response?.message || "Invalid credentials");
             }
