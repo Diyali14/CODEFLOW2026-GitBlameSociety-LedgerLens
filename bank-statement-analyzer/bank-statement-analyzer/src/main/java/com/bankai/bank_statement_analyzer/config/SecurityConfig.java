@@ -30,34 +30,15 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http)
-            throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+                .cors(cors -> {})
                 .csrf(csrf -> csrf.disable())
-
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/api/auth/signup",
-                                "/api/auth/login",
-                                "/api/statements/upload",
-                                "/api/test-ai",
-                                "/api/category/run",
-                                "/api/analytics/spending-by-category",
-                                "/api/analytics/dashboard",
-                                "/api/analytics/highest-category-spending",
-                                "/api/analytics/transactions-table",
-                                "/api/analytics/recurring-transactions",
-                                "/api/anomaly/run"
-                        ).permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
                         .anyRequest().authenticated()
-                )
-
-                .userDetailsService(userDetailsService)
-
-                .formLogin(form -> form.disable())
-
-                .httpBasic(Customizer.withDefaults());
+                );
 
         return http.build();
     }
