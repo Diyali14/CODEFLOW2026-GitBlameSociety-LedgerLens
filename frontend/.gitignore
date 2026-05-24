@@ -10,8 +10,12 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
-*.local
+# Environment variable files — never commit real secrets
 .env
+.env.local
+.env.*.local
+# Keep the example template committed
+!.env.example
 
 # Editor directories and files
 .vscode/*
