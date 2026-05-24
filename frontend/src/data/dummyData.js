@@ -437,8 +437,8 @@ export const reportsData = [
 ];
 
 export const profileData = {
-    username: "Diya",
-    email: "diya@gmail.com",
+    username: "Sam",
+    email: "sam@gmail.com",
     statementsAnalyzed: 12,
     financialScore: 78,
     uploads: 32,

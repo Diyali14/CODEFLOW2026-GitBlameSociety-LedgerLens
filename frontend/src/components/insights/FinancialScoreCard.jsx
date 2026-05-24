@@ -1,6 +1,57 @@
-function FinancialScoreCard({
-    data,
-}) {
+import { useEffect, useState } from "react";
+
+function FinancialScoreCard({ data }) {
+
+    const [progress, setProgress] =
+        useState(0);
+
+    useEffect(() => {
+
+        let start = 0;
+
+        const end = data.score;
+
+        const duration = 1500;
+
+        const incrementTime =
+            15;
+
+        const step =
+            end /
+            (duration / incrementTime);
+
+        const timer = setInterval(() => {
+
+            start += step;
+
+            if (start >= end) {
+
+                start = end;
+
+                clearInterval(timer);
+
+            }
+
+            setProgress(
+                Math.round(start)
+            );
+
+        }, incrementTime);
+
+        return () =>
+            clearInterval(timer);
+
+    }, [data.score]);
+
+    const radius = 85;
+
+    const circumference =
+        2 * Math.PI * radius;
+
+    const strokeDashoffset =
+        circumference -
+        (progress / 100) *
+        circumference;
 
     return (
         <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
@@ -11,12 +62,43 @@ function FinancialScoreCard({
 
             <div className="mt-8 flex items-center justify-center">
 
-                <div className="w-48 h-48 rounded-full border-14 border-green-500 flex items-center justify-center">
+                <div className="relative w-56 h-56 flex items-center justify-center">
 
-                    <div>
+                    <svg
+                        className="absolute top-0 left-0 w-full h-full -rotate-90"
+                        viewBox="0 0 220 220"
+                    >
+
+                        {/* Background Circle */}
+                        <circle
+                            cx="110"
+                            cy="110"
+                            r={radius}
+                            stroke="#E2E8F0"
+                            strokeWidth="14"
+                            fill="none"
+                        />
+
+                        {/* Animated Progress Circle */}
+                        <circle
+                            cx="110"
+                            cy="110"
+                            r={radius}
+                            stroke="#22C55E"
+                            strokeWidth="14"
+                            fill="none"
+                            strokeLinecap="round"
+                            strokeDasharray={circumference}
+                            strokeDashoffset={strokeDashoffset}
+                            className="transition-all duration-300 ease-out"
+                        />
+
+                    </svg>
+
+                    <div className="z-10">
 
                         <h1 className="text-5xl font-bold text-green-700 text-center">
-                            {data.score}
+                            {progress}
                         </h1>
 
                         <p className="text-slate-500 text-center mt-2">
